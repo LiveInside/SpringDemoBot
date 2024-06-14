@@ -1,12 +1,14 @@
 package io.project.SpringDemoBot.service;
 
 import io.project.SpringDemoBot.configure.BotConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Slf4j
 @Component //Spring автоматически создаёт экземпляр
 public class TelegramBot extends TelegramLongPollingBot {// LongPollingBot - сам проверяет не пришло ли сообщение.
     // Есть аналог WebhookBot - при взаимодейтсвии пользователя с ботом, приложение будет получать уведомление и что-то с этим делать.
@@ -43,6 +45,7 @@ public class TelegramBot extends TelegramLongPollingBot {// LongPollingBot - с�
     private  void startCommandReceived(long chatId, String name) {
 
         String answer = "Hi, " + name + ", nice to meet you!";
+        log.info("Replied to user " + name);
 
         sendMessage(chatId, answer);
     }
@@ -54,7 +57,7 @@ public class TelegramBot extends TelegramLongPollingBot {// LongPollingBot - с�
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error("Error occurred: " + e.getMessage());
         }
 
     }
